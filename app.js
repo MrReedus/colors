@@ -7,6 +7,8 @@ document.addEventListener('click', (event) => {
         const node = event.target.tagName.toLowerCase() === 'i' ? event.target : event.target.children[0];
         node.classList.toggle('fa-lock');
         node.classList.toggle('fa-lock-open');
+    } else if (type === 'copy') {
+        copyToClickBoard(event.target.textContent)
     }
 })
 
@@ -26,6 +28,11 @@ function generateRandomColors() {
         color += hexCodes[Math.floor(Math.random() * hexCodes.length)]
     }
     return '#' + color;
+}
+
+function copyToClickBoard(text) {
+    return navigator.clipboard.writeText(text)
+
 }
 
 
