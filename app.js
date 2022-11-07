@@ -36,16 +36,29 @@ function copyToClickBoard(text) {
 }
 
 
-function setRandoomColors() {
-    cols.forEach((col) => {
+function setRandoomColors(isInitial) {
+    const colors = isInitial ? getColorsFromHash() : [];
+
+    cols.forEach((col, index) => {
         const isLoked = col.querySelector('i').classList.contains('fa-lock')
         const text = col.querySelector('h2');
-        const color = generateRandomColors();
         const button = col.querySelector('button');
 
         if (isLoked) {
+            colors.push(text.textContent)
             return
         }
+
+        const color = isInitial
+            ? colors[index]
+                ? colors[index]
+                : generateRandomColors()
+            : generateRandomColors();
+
+        if (!isInitial) {
+            colors.push(color)
+        }
+
 
         text.textContent = color;
         col.style.background = color;
@@ -53,9 +66,9 @@ function setRandoomColors() {
         setTextColor(text, color)
         setTextColor(button, color)
     })
-}
 
-setRandoomColors();
+    updateColorsHash(colors)
+}
 
 function setTextColor(text, color) {
     const luminance = chroma(color).luminance()
@@ -65,6 +78,26 @@ function setTextColor(text, color) {
         text.style.color = 'white'
     }
 }
+
+function updateColorsHash(colors = []) {
+    document.location.hash = colors
+        .map(col => {
+            return col.toString().substring(1)
+        })
+        .join('-')
+}
+
+function getColorsFromHash() {
+    if (document.location.hash.length > 1) {
+        return document.location.hash
+            .substring(1)
+            .split('-')
+            .map((color) => '#' + color)
+    }
+    return [];
+}
+
+setRandoomColors(true);
 
 
 
