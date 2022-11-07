@@ -31,9 +31,15 @@ function generateRandomColors() {
 
 function setRandoomColors() {
     cols.forEach((col) => {
+        const isLoked = col.querySelector('i').classList.contains('fa-lock')
         const text = col.querySelector('h2');
         const color = generateRandomColors();
         const button = col.querySelector('button');
+
+        if (isLoked) {
+            return
+        }
+
         text.textContent = color;
         col.style.background = color;
 
